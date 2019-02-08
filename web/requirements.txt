@@ -1,0 +1,5 @@
+Django==2.1.5
+uwsgi==2.0.17
+PyMySQL==0.8.0
+channels==2.1.7
+Pillow
