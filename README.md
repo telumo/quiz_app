@@ -6,12 +6,12 @@ quiz app for kokusai 31th
 
 ### build
 ```sh
-docker-compose -f docker-compose-local.yml build --no-cache
+docker-compose build --no-cache
 ```
 
 ### start
 ```sh
-docker-compose -f docker-compose-local.yml up -d
+docker-compose up -d
 ```
 
 

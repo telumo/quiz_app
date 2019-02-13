@@ -1,0 +1,67 @@
+version: '3'
+
+services:
+  db:
+    image: mysql:5.7
+    hostname: db
+    command: mysqld --character-set-server=utf8 --collation-server=utf8_unicode_ci
+    restart: always
+    volumes:
+      - db-data:/var/lib/mysql
+    ports:
+      - "3306:3306"
+    environment:
+      - MYSQL_DATABASE=quiz
+      - MYSQL_ROOT_PASSWORD=quizuser
+      - MYSQL_ROOT_HOST=%
+    networks:
+      - default
+
+  redis:
+    image: redis:alpine
+    restart: always
+    expose:
+      - "6379"
+    command: redis-server --appendonly yes
+    networks:
+      - default
+
+  app:
+    build:
+    context: .
+    command: sh -c "sleep 10; python manage.py makemigrations; python manage.py migrate; python manage.py collectstatic --noinput; nohup gunicorn (your_app_name).wsgi -b 0.0.0.0:8000 &amp; daphne -b 0.0.0.0 -p 8001 (your_app_name).asgi:application"
+    restart: always
+    expose:
+      - "8000"
+      - "8001"
+    volumes:
+      - .:/webapp
+      - static:/var/www/static
+    depends_on:
+      - db
+      - redis
+    networks:
+      - default
+
+  web:
+    image: nginx:latest
+    ports:
+      - "8000:8000"
+    volumes:
+      - static:/var/www/static
+      - public-data:/webapp/public
+      - tmp-data:/webapp/tmp
+      - ./settings/nginx/nginx.conf:/etc/nginx/conf.d/default.conf
+    depends_on:
+      - app
+    networks:
+      - default
+
+volumes:
+  static:
+    public-data:
+      tmp-data:
+        db-data:
+
+networks:
+  default:
