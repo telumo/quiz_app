@@ -4,12 +4,12 @@ LABEL maintainer="Hikaru Hasegawa<drumscohika@gmail.com>"
 
 ENV PYTHONUNBUFFERED 1
 
-RUN mkdir /code
+RUN mkdir /webapp
 
-WORKDIR /code
+WORKDIR /webapp
 
-ADD requirements.txt /code/
+ADD requirements.txt /webapp/
 
 RUN pip install -r requirements.txt
 
-ADD . /code/
+ADD . /webapp/
