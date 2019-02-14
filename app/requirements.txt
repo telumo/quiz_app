@@ -4,5 +4,4 @@ PyMySQL==0.8.0
 channels==2.1.7
 channels_redis==2.3.3
 gunicorn
-asgi_redis
 Pillow
